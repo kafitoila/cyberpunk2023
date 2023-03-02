@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import requests
+import time
 
 @dataclass
 class DatabaseConfig:
@@ -54,26 +55,51 @@ me = '/getMe'
 #result = get_request_result(url + me + json)
 #request_print(url + me + json)
 
-offset: int = -2
-updates = requests.get(f'{api_url}{token}{upd}?offset={offset + 1}').json()
-
 send = '/sendMessage'
+sendPhoto = '/sendPhoto'
 #chat_id = '499598131'
 #user_name = '\u041a\u043e\u0441\u0438\u043b \u041a\u043e\u0441\u043e\u0439'
 
-if updates['result']:
-    for result in updates['result']:
-        print (result)
-        offset = result['update_id']
-        chat_id = result['message']['from']['id']
-        user_name = result['message']['from']['first_name']
-        text = f'Привет, {user_name}! Травма Тим скоро прибудет.'
-        query = f'?chat_id={chat_id}&text={text}'
-        #res = requests.get(f'{api_url}{token}{send}?chat_id={chat_id}&text={text}')
-        res = requests.get(f'{api_url}{token}{send}{query}')
+cat_url: str = 'https://aws.random.cat/meow'
+cat_error_text: str = 'Нет котика('
 
-        if result['message']['text']: msg = result['message']['text']
-        text2 = f'Ого, {msg}? Ха-ха!'
-        print(text2)
-        query2 = f'?chat_id={chat_id}&text={text2}'
-        res = requests.get(f'{api_url}{token}{send}{query2}')
+offset: int = -2
+counter: int = 0
+cat_response: requests.Response
+cat_link: str
+msg: str = ''
+
+#while counter < 100:
+while msg != 'terminate':
+    updates = requests.get(f'{api_url}{token}{upd}?offset={offset + 1}').json()
+    if updates['result']:
+        for result in updates['result']:
+            print (result)
+            offset = result['update_id']
+            chat_id = result['message']['from']['id']
+            user_name = result['message']['from']['first_name']
+            #res = requests.get(f'{api_url}{token}{send}?chat_id={chat_id}&text={text}')
+            msg = result['message']['text']
+            if msg.startswith('/sos'):
+                address = msg.strip('/sos ')
+                if address != '':
+                    text = f'Привет, {user_name}! Травма Тим скоро прибудет в {address}.'
+                else:
+                    text = f'Привет, {user_name}! Травма Тим скоро прибудет.'
+                query = f'?chat_id={chat_id}&text={text}'
+                res = requests.get(f'{api_url}{token}{send}{query}')
+
+            else:
+                text2 = f'Ого, {msg}? Ха-ха!'
+                print(text2)
+                query2 = f'?chat_id={chat_id}&text={text2}'
+                res = requests.get(f'{api_url}{token}{send}{query2}')
+                cat_response = requests.get(f'{cat_url}')
+                if cat_response.status_code == 200:
+                    cat_link = cat_response.json()['file']
+                    cat_query = f'?chat_id={chat_id}&photo={cat_link}'
+                    requests.get(f'{api_url}{token}{sendPhoto}{cat_query}')
+                else:
+                    requests.get(f'{api_url}{token}{send}{cat_error_text}')
+    time.sleep(1)
+    counter +=1

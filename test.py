@@ -25,7 +25,7 @@ def get_request_result(url:str) -> str | dict:
 
 
 api_url = 'https://api.telegram.org/bot'
-token = config.main_bot.token
+token = '' #config.main_bot.token
 json = '?offset={offset + 1}'
 url = api_url + token
 upd = '/getUpdates'
