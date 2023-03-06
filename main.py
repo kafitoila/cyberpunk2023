@@ -17,16 +17,65 @@ async def handle_help_command(message: Message):
     await message.answer('Напиши мне что-нибудь и в ответ '
                          'я пришлю тебе твое сообщение')
 
+async def send_sticker_echo(message: Message):
+    print("sticker")
+    print(message)
+    await message.answer_sticker(message.sticker.file_id)
+
 async def send_photo_echo(message: Message):
+    print("photo")
     print(message)
     await message.reply_photo(message.photo[0].file_id)
 
+async def send_video_echo(message: Message):
+    print("video")
+    print(message)
+    await message.answer_video(message.video.file_id)
+
+async def send_video_note_echo(message: Message):
+    print("video_note")
+    print(message)
+    await message.answer_video_note(message.video_note.file_id)
+
+async def send_audio_echo(message: Message):
+    print("audio")
+    print(message)
+    await message.answer_audio(message.audio.file_id)
+
+async def send_voice_echo(message: Message):
+    print("voice")
+    print(message)
+    await message.answer_voice(message.voice.file_id)
+
+async def send_file_echo(message: Message):
+    print("files")
+    print(message)
+    await message.answer_document(message.document.file_id)
+
+async def send_poll_echo(message: Message):
+    print("poll")
+    print(message)
+    await message.answer_poll(message.chat.id, message.poll.question, message.poll.options, message.poll.is_anonymous)
+
 async def send_echo(message: Message):
-    await message.reply(text=message.text)
+    print("echo")
+    print(message)
+    try:
+        await message.reply(text=message.text)
+    #except TypeError:
+    except:
+        await message.reply(text='Данный тип сообщений не поддерживается ')
 
 dp.message.register(handle_start_command, Command(commands=["start"]))
 dp.message.register(handle_help_command,  Command(commands=['help']))
-dp.message.register(send_photo_echo, F.content_type == ContentType.PHOTO)
+dp.message.register(send_photo_echo, F.photo)
+dp.message.register(send_video_echo, F.video)
+dp.message.register(send_video_note_echo, F.video_note)
+dp.message.register(send_sticker_echo, F.sticker)
+dp.message.register(send_audio_echo, F.audio)
+dp.message.register(send_voice_echo, F.voice)
+dp.message.register(send_file_echo, F.document)
+#dp.message.register(send_poll_echo, F.poll)
 dp.message.register(send_echo)
 
 if __name__ == '__main__':
