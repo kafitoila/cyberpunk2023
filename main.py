@@ -9,57 +9,59 @@ bot: Bot = Bot(token = token)
 dp: Dispatcher = Dispatcher()
 
 async def handle_start_command(message: Message):
+    print(message.json(indent=2, exclude_none=True))
     answer: str = 'Привет!\nМеня зовут Эхо-бот!\nНапиши мне что-нибудь'
     #await message.answer(answer)
     await bot.send_message(message.chat.id, answer)
 
 async def handle_help_command(message: Message):
+    print(message.json(indent=2, exclude_none=True))
     await message.answer('Напиши мне что-нибудь и в ответ '
                          'я пришлю тебе твое сообщение')
 
 async def send_sticker_echo(message: Message):
     print("sticker")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_sticker(message.sticker.file_id)
 
 async def send_photo_echo(message: Message):
     print("photo")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.reply_photo(message.photo[0].file_id)
 
 async def send_video_echo(message: Message):
     print("video")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_video(message.video.file_id)
 
 async def send_video_note_echo(message: Message):
     print("video_note")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_video_note(message.video_note.file_id)
 
 async def send_audio_echo(message: Message):
     print("audio")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_audio(message.audio.file_id)
 
 async def send_voice_echo(message: Message):
     print("voice")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_voice(message.voice.file_id)
 
 async def send_file_echo(message: Message):
     print("files")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_document(message.document.file_id)
 
 async def send_poll_echo(message: Message):
     print("poll")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     await message.answer_poll(message.chat.id, message.poll.question, message.poll.options, message.poll.is_anonymous)
 
 async def send_echo(message: Message):
     print("echo")
-    print(message)
+    print(message.json(indent=2, exclude_none=True))
     try:
         await message.reply(text=message.text)
     #except TypeError:
