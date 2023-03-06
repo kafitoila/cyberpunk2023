@@ -64,42 +64,53 @@ cat_url: str = 'https://aws.random.cat/meow'
 cat_error_text: str = 'Нет котика('
 
 offset: int = -2
-counter: int = 0
+timeout = 160
 cat_response: requests.Response
 cat_link: str
 msg: str = ''
+updates: dict
 
-#while counter < 100:
+def send_cat() -> str:
+    print (result)
+    if 'message' in result:
+        chat_id = result['message']['from']['id']
+        msg = result['message']['text']
+        user_name = result['message']['from']['first_name']
+    else:
+        chat_id = result['edited_message']['from']['id']
+        msg = result['edited_message']['text']
+    #res = requests.get(f'{api_url}{token}{send}?chat_id={chat_id}&text={text}')\
+    if msg.startswith('/sos'):
+        address = msg.strip('/sos ')
+        if address != '':
+            text = f'Привет, {user_name}! Травма Тим скоро прибудет в {address}.'
+        else:
+            text = f'Привет, {user_name}! Травма Тим скоро прибудет.'
+        query = f'?chat_id={chat_id}&text={text}'
+        res = requests.get(f'{api_url}{token}{send}{query}')
+
+    else:
+        text2 = f'Ого, {msg}? Ха-ха!'
+        print(text2)
+        query2 = f'?chat_id={chat_id}&text={text2}'
+        res = requests.get(f'{api_url}{token}{send}{query2}')
+        cat_response = requests.get(f'{cat_url}')
+        if cat_response.status_code == 200:
+            cat_link = cat_response.json()['file']
+            cat_query = f'?chat_id={chat_id}&photo={cat_link}'
+            requests.get(f'{api_url}{token}{sendPhoto}{cat_query}')
+        else:
+            requests.get(f'{api_url}{token}{send}{cat_error_text}')
+    return msg
+
 while msg != 'terminate':
-    updates = requests.get(f'{api_url}{token}{upd}?offset={offset + 1}').json()
+    start_time = time.time()
+    updates = requests.get(f'{api_url}{token}{upd}?offset={offset + 1}&timeout = {timeout}').json()
     if updates['result']:
         for result in updates['result']:
-            print (result)
             offset = result['update_id']
-            chat_id = result['message']['from']['id']
-            user_name = result['message']['from']['first_name']
-            #res = requests.get(f'{api_url}{token}{send}?chat_id={chat_id}&text={text}')
-            msg = result['message']['text']
-            if msg.startswith('/sos'):
-                address = msg.strip('/sos ')
-                if address != '':
-                    text = f'Привет, {user_name}! Травма Тим скоро прибудет в {address}.'
-                else:
-                    text = f'Привет, {user_name}! Травма Тим скоро прибудет.'
-                query = f'?chat_id={chat_id}&text={text}'
-                res = requests.get(f'{api_url}{token}{send}{query}')
+            print(offset)
+            msg = send_cat()
 
-            else:
-                text2 = f'Ого, {msg}? Ха-ха!'
-                print(text2)
-                query2 = f'?chat_id={chat_id}&text={text2}'
-                res = requests.get(f'{api_url}{token}{send}{query2}')
-                cat_response = requests.get(f'{cat_url}')
-                if cat_response.status_code == 200:
-                    cat_link = cat_response.json()['file']
-                    cat_query = f'?chat_id={chat_id}&photo={cat_link}'
-                    requests.get(f'{api_url}{token}{sendPhoto}{cat_query}')
-                else:
-                    requests.get(f'{api_url}{token}{send}{cat_error_text}')
-    time.sleep(1)
-    counter +=1
+    end_time = time.time()
+    print (start_time - end_time)
