@@ -77,7 +77,7 @@ dp.message.register(send_sticker_echo, F.sticker)
 dp.message.register(send_audio_echo, F.audio)
 dp.message.register(send_voice_echo, F.voice)
 dp.message.register(send_file_echo, F.document)
-#dp.message.register(send_poll_echo, F.poll)
+dp.message.register(send_poll_echo, F.poll)
 dp.message.register(send_echo)
 
 if __name__ == '__main__':
