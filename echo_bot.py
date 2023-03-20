@@ -19,6 +19,11 @@ async def handle_help_command(message: Message):
     await message.answer('Напиши мне что-нибудь и в ответ '
                          'я пришлю тебе твое сообщение')
 
+async def handle_hack_command(message: Message):
+    print(message.json(indent=2, exclude_none=True))
+    await message.answer('Wow! '
+                         'Real gangsta shit')
+
 async def send_sticker_echo(message: Message):
     print("sticker")
     print(message.json(indent=2, exclude_none=True))
@@ -70,6 +75,7 @@ async def send_echo(message: Message):
 
 dp.message.register(handle_start_command, Command(commands=["start"]))
 dp.message.register(handle_help_command,  Command(commands=['help']))
+dp.message.register(handle_hack_command,  Command(commands=['hack'], prefix='+'))
 dp.message.register(send_photo_echo, F.photo)
 dp.message.register(send_video_echo, F.video)
 dp.message.register(send_video_note_echo, F.video_note)
