@@ -2,3 +2,4 @@ print('Это файл __init__.py пакета pack_1, его имя во вр�
 
 from . import file_11
 from . import file_12
+from .file_11 import *

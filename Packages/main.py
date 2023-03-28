@@ -11,11 +11,18 @@ print('Это основной модуль main.py, его имя в проце
 #print('b =', file_211.b)
 #print('Словарь some_dict:', file_211.some_dict)
 
-from pack1.file_11 import result
-from pack2.pack21.file_211 import r
+#from pack1.file_11 import result
+#from pack2.pack21.file_211 import r
+import pack1
 import pack2
+from pack2 import pack21
 
-print('result =', result)
-print('r =', r)
-print(pack2.another_some_func(7))
+
+print(dir())
+print(dir(pack1))
 print(dir(pack2))
+print(dir(pack21))
+
+#print('result =', result)
+#print('r =', r)
+#print(pack2.another_some_func(7))
