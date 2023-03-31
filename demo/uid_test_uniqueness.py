@@ -1,12 +1,9 @@
-import os
 import random
 import string
 import time
 import timeit
 from statistics import mean
 from statistics import stdev
-
-token = os.getenv('paytoken')
 
 alphabet = string.ascii_uppercase + string.digits
 uid_length: int = 6
