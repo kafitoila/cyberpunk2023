@@ -10,6 +10,7 @@ __all__ = ['some_var', 'yet_another_var', 'another_func']
 some_var: int = 2
 another_var: int = 4
 yet_another_var: str = 'some_text'
+a: int = 7
 
 
 def _reverse_text(text: str) -> str:
@@ -21,3 +22,6 @@ def some_func(text: str, times: int) -> str:
 
 def another_func() -> None:
     pass
+
+def func_1(n: int) -> int:
+    return n * n

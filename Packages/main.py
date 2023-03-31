@@ -26,3 +26,9 @@ print(dir(pack21))
 #print('result =', result)
 #print('r =', r)
 #print(pack2.another_some_func(7))
+
+from pack1.file_11 import func_1
+from pack1.file_12 import a
+
+
+print(func_1(a))
