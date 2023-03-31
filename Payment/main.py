@@ -1,3 +1,6 @@
 import os
+import dotenv
 
-token = os.getenv('paytoken')
+dotenv.load_dotenv()
+
+print(os.getenv('token'))
