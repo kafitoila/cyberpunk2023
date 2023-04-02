@@ -6,7 +6,7 @@ from statistics import mean
 from statistics import stdev
 
 alphabet = string.ascii_uppercase + string.digits
-uid_length: int = 6
+uid_length: int = 5
 
 def random_choice():
     return ''.join(random.choices(alphabet, k=uid_length))
@@ -16,7 +16,7 @@ def random_choice_num():
 def test_collisions(function):
     out = set()
     count = 0
-    for _ in range(100000):
+    for _ in range(500):
         new = function()
         if new in out:
             count += 1

@@ -28,7 +28,7 @@ def load_config(path: str | None) -> Config:
     env.read_env(path)
 
     return Config(bot=Bot(token=env('TOKEN'),
-                               admins=list(map(int, env.list('ADMINS')))),
+                          admins=list(map(int, env.list('ADMINS')))),
                   db=DatabaseConfig(database=env('DATABASE'),
                                     db_host=env('DB_HOST'),
                                     db_user=env('DB_USER'),
