@@ -8,6 +8,7 @@ class DatabaseConfig:
     db_host: str          # URL-адрес базы данных
     db_user: str          # Username пользователя базы данных
     db_password: str      # Пароль к базе данных
+    db_port: str
 
 
 @dataclass
@@ -32,4 +33,5 @@ def load_config(path: str | None) -> Config:
                   db=DatabaseConfig(database=env('DATABASE'),
                                     db_host=env('DB_HOST'),
                                     db_user=env('DB_USER'),
-                                    db_password=env('DB_PASSWORD')))
+                                    db_password=env('DB_PASSWORD'),
+                                    db_port=env('DB_PORT')))

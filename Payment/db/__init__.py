@@ -1,2 +1,2 @@
 from . import model
-from . import method
+from . import database
