@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS user(
     secret_id CHAR(6),
     tg_id     BIGINT,
     user_name VARCHAR(128),
+    ref_name  VARCHAR(128),
+    irl_name  VARCHAR(128),
     balance   INTEGER,
     is_dead   BOOLEAN,
     addiction SMALLINT,  /* 0 - no addiction; 1, 2, etc - amount of doses required */
