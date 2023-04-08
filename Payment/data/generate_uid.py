@@ -138,15 +138,10 @@ name_model = load_model('user_full.csv')
 uid_in_use = get_uid(name_model,2)
 implant_model = load_model('implant_print_general.csv')
 uid_in_use.extend(get_uid(implant_model,1))
-print(len(uid_in_use))
-
-uid = generate_uid(random_choice, uid_in_use)
-uid_num = generate_uid(random_choice_num, uid_in_use)
-
-# add_uid_implant_general('implant_print_set.csv', 'implant_print_general.csv', 12)
-
-transpose_data('implant_print_start.csv', 'implant_print_start1.csv')
 implant_start_model = load_model('implant_print_start1.csv')
 uid_in_use.extend(get_uid(implant_start_model,2))
 print(len(uid_in_use))
 print(get_collisions(uid_in_use))
+
+uid = generate_uid(random_choice, uid_in_use)
+uid_num = generate_uid(random_choice_num, uid_in_use)
