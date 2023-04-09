@@ -13,9 +13,8 @@ def is_admin(id: int, admins):
 
 router_adm: Router = Router()
 
-router_adm.message.filter(~Command(commands=['help','start']))
-print(dir(router_adm))
-print(admins)
+# router_adm.message.filter(~Command(commands=['help','start']))
+router_adm.message.filter(~Command(commands=['help','start','pay','911']))
 
 @router_adm.message()
 async def handle_message(message: Message):

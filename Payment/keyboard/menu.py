@@ -3,7 +3,7 @@ from aiogram.types import BotCommand
 from i18n import i18n_ru
 
 async def set_menu(bot: Bot):
-
+    print('Меню создание')
     # Создаем список с командами и их описанием для кнопки menu
     main_menu_commands = [
         BotCommand(command='/help',
@@ -16,10 +16,15 @@ async def set_menu(bot: Bot):
                    description=i18n_ru.menu_balance),
         BotCommand(command='/pay_from',
                    description=i18n_ru.menu_pay_from),
+        BotCommand(command='/911',
+                   description=i18n_ru.menu_pay_from),
+        BotCommand(command='/next',
+                   description=i18n_ru.menu_pay_from),
         BotCommand(command='/set_access',
                    description=i18n_ru.menu_set_access),
         BotCommand(command='/get_access',
                    description=i18n_ru.menu_get_access)]
+    print('Меню создано')
 
 # async def set_main_menu(bot: Bot):
 #     main_menu_commands = [BotCommand(
