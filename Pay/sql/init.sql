@@ -1,4 +1,8 @@
-CREATE TYPE insurance AS ENUM ('Нет', 'Серебро', 'Золото', 'Платина');
+DO $$ BEGIN
+    CREATE TYPE insurance AS ENUM ('Нет', 'Серебро', 'Золото', 'Платина');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS users(
     user_id   INTEGER PRIMARY KEY,

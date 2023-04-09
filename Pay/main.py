@@ -8,20 +8,24 @@ from aiogram.filters import Command
 # from aiogram.fsm.storage.redis import RedisStorage
 
 from core.middlewares.dbmiddleware import DbSession
+from db.database import Request
 from core.config import config
-from core.utils.commands import set_commands
-from core.handlers import sender
-from core.utils.sender_list import SenderList
-from core.utils.sender_state import Steps
+from keyboard.menu import set_menu
+from handler import user_handler, admin_handler
+# from core.handlers import sender
+# from core.utils.sender_list import SenderList
+# from core.utils.sender_state import Steps
 
 
 async def start_bot(bot: Bot):
-    await set_commands(bot)
+    await set_menu(bot)
     await bot.send_message(config.bot.admins[0], text='Бот запущен!')
 
 
-async def stop_bot(bot: Bot):
+async def stop_bot(bot: Bot): #, dp: Dispatcher):
     await bot.send_message(config.bot.admins[0], text='Бот остановлен!')
+    await bot.session.close()
+    await bot.close()
 
 
 async def create_pool():
@@ -30,20 +34,26 @@ async def create_pool():
                                      port=config.db.db_port, command_timeout=60)
 
 
-async def start():
+async def main():
     logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)s - [%(levelname)s] -  %(name)s - "
                                "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
                         )
     bot = Bot(token=config.bot.token, parse_mode='HTML')
     pool_connect = await create_pool()
+    # await Request.init(pool_connect)
+
     # storage = RedisStorage.from_url('redis://localhost:6379/0')
     # dp = Dispatcher(storage=storage)
     dp = Dispatcher()
 
     dp.update.middleware.register(DbSession(pool_connect))
+    await Request.init(pool_connect)
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+
+    dp.include_router(admin_handler.router_adm)
+    dp.include_router(user_handler.router)
 
     # dp.message.register(sender.get_sender, Command(commands='sender', magic=F.args),
     #                     F.chat.id == config.bot.admins[0])
@@ -59,9 +69,10 @@ async def start():
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     except Exception as ex:
         logging.error(f"[!!! Exception] - {ex}", exc_info=True)
-    finally:
-        await bot.session.close()
+    # finally:
+        # dp.stop_pollin()
+        # await dp.wait_closed()
 
 if __name__ == "__main__":
     with contextlib.suppress(KeyboardInterrupt, SystemExit):
-        asyncio.run(start())
+        asyncio.run(main())
