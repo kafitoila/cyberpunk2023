@@ -1,0 +1,6 @@
+TOKEN=1234567:AAG91Yzkhvxe0whMP9Taaaaaaaaaaaaaaaa
+ADMIN_ID=123456789
+DB_HOST=127.0.0.1
+DB_USER=postgres
+DB_DATABASE=nztcoderbot
+DB_PASSWORD=qwerty
