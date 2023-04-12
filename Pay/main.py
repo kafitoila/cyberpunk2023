@@ -35,19 +35,23 @@ async def create_pool():
 
 
 async def main():
-    logging.basicConfig(level=logging.DEBUG,
-                        format="%(asctime)s - [%(levelname)s] -  %(name)s - "
-                               "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
-                        )
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(filename)s:%(lineno)d #%(levelname)-8s '
+               '[%(asctime)s] - %(name)s - %(message)s')
+    # logging.basicConfig(level=logging.DEBUG,
+    #                     format="%(asctime)s - [%(levelname)s] -  %(name)s - "
+    #                            "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
+    #                     )
     bot = Bot(token=config.bot.token, parse_mode='HTML')
     pool_connect = await create_pool()
-    # await Request.init(pool_connect)
 
     # storage = RedisStorage.from_url('redis://localhost:6379/0')
     # dp = Dispatcher(storage=storage)
     dp = Dispatcher()
 
     dp.update.middleware.register(DbSession(pool_connect))
+    dp.message.middleware(DbSession(pool_connect))
     await Request.init(pool_connect)
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
@@ -64,7 +68,9 @@ async def main():
     # dp.message.register(sender.get_url_button, Steps.get_url_button, F.chat.id == config.bot.admins[0], F.text)
 
     # sender_list = SenderList(bot, pool_connect)
+
     try:
+        await bot.delete_webhook(drop_pending_updates=True)
         # await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types(), senderlist=sender_list)
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     except Exception as ex:

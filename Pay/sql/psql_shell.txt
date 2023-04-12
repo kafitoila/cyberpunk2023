@@ -1,0 +1,9 @@
+$psql cyberpunk.cnalypkemcrw.eu-central-1.rds.amazonaws.com ^
+    -U postgres ^
+    -p 5432 ^
+    -h cyberpunk ^
+    -c "\COPY users FROM 'users.csv' DELIMITER ',' CSV HEADER;" 
+	
+psql --host=cyberpunk.cnalypkemcrw.eu-central-1.rds.amazonaws.com --port=5432 --username=postgres --password --dbname=cyberpunk
+[Database] - cyberpunk
+\COPY users FROM 'C:\Users\HP745G6\Storage\Bot\General\Pay\data\users.csv' DELIMITER ',' CSV HEADER;

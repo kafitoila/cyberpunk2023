@@ -22,6 +22,18 @@ f'/set_access - {menu_set_access}\n' \
 f'/get_access - {menu_get_access}\n'
 default = 'Команда не распознана. Проверьте правильность написания'
 
+greeting   = 'Регистрация прошла успешно! Проверьте свой баланс командой /balance'
+name       = 'Имя: '
+user_id    = 'Номер счёта: '
+balance    = 'Баланс: '
+is_blocked = 'Счёт блокирован: '
+
+yes = 'Да'
+no  = 'Нет'
+
+sql_injection = 'Netwatch обратил на тебя своё пристальное внимание. Не ломайте, а то сломаете.'
+
+
 comm: dict[str, str] = {
                 '/command_1': 'command_1 desription',
                 '/command_2': 'command_2 desription',

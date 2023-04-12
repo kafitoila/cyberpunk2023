@@ -12,12 +12,10 @@ class Request:
         print('DB init')
         f = open("sql/init.sql", "r", encoding='UTF8')
         query1 = f.read()
-        print(query1)
-        # print(dir(self))
         await self.execute(query1)
 
-    async def check_table(self, name_table):
-        query = f"SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = '{name_table}');"
+    async def check_user_id_exists(self, user_id):
+        query = f"SELECT EXISTS (SELECT 1 FROM users WHERE user_id = {user_id});"
         return await self.connector.fetchval(query)
 
     async def create_table(self, name_table):

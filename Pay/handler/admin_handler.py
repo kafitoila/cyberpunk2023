@@ -1,14 +1,23 @@
 from aiogram import Router
 from aiogram.types import Message
-from aiogram.filters import Command, CommandStart, CommandObject
+from aiogram.filters import Command, CommandStart, CommandObject, BaseFilter
 from core.config import config
 from i18n import i18n_ru
 
-admins = config.bot.admins
 
-def is_admin(id: int, admins):
-    if id in admins:
-        return True
+# Собственный фильтр, проверяющий юзера на админа
+class IsAdmin(BaseFilter):
+    def __init__(self, admins: list[int]) -> None:
+        # В качестве параметра фильтр принимает список с целыми числами
+        self.admins = config.bot.admins
+
+    async def __call__(self, message: Message) -> bool:
+        print(message.from_user.id)
+        return message.from_user.id in self.admins
+
+# def is_admin(id: int, admins):
+#     if id in admins:
+#         return True
 
 router_adm: Router = Router()
 
@@ -26,15 +35,13 @@ async def handle_exit(message: Message):
     except TypeError:
         await message.answer(text=i18n_ru.default)
 
-@router_adm.message()
-async def handle_message(message: Message):
-    try:
-        #await message.answer(chat_id=message.chat.id)
-        user=message.from_user
-        print(user)
-        if is_admin(user.id, admins):
-            await message.answer(text=f'{user.first_name} {user.last_name}, ты админ\!')
-        else:
-            await message.answer(text=f'{user.first_name} {user.last_name}, ты не админ\!')
-    except TypeError:
-        await message.answer(text=i18n_ru.default)
+# Этот хэндлер будет срабатывать, если апдейт от админа
+# @router_adm.message(IsAdmin(config.bot.admins))
+# async def answer_if_admins_update(message: Message):
+#     await message.answer(text='Вы админ')
+
+
+# Этот хэндлер будет срабатывать, если апдейт не от админа
+# @router_adm.message(~IsAdmin(config.bot.admins))
+# async def answer_if_not_admins_update(message: Message):
+#     await message.answer(text='Вы не админ')
