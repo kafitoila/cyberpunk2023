@@ -1,6 +1,7 @@
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart, BaseFilter, Text
+from aiogram import F
 from i18n import i18n_ru
 from db.database import Request
 
@@ -8,22 +9,19 @@ class CodeInMessage(BaseFilter):
     async def __call__(self, message: Message) -> bool | dict[str, list[str]]:
         # Разрезаем сообщение по пробелам, проверяем
         msg = message.text.split()
-        print(msg)
         if len(msg) > 1:
             return {'msg': msg}
         return False
 
-router: Router = Router()
+class TextInMessage(BaseFilter):
+    async def __call__(self, message: Message) -> bool | dict[str, list[str]]:
+        # Разрезаем сообщение по пробелам, проверяем
+        msg = message.text.split()
+        if len(msg) > 2:
+            return {'msg': msg}
+        return False
 
-@router.message(CommandStart(),CodeInMessage())
-async def handle_registration(message: Message, msg: list[str], request: Request):
-    # check code exists in DB
-    if await request.check_user_id_exists(msg[1]):
-        print('Регистрация прошла успешно!')
-    # check code is not already registered
-    # register in DB
-    # send greeting message
-    await message.answer(text=msg[1])
+router: Router = Router()
 
 @router.message(Text(contains='select', ignore_case=True))
 @router.message(Text(contains='insert', ignore_case=True))
@@ -41,6 +39,24 @@ async def handle_registration(message: Message, msg: list[str], request: Request
 async def handle_sql_injection(message: Message, msg: list[str]):
     await message.answer(text=i18n_ru.sql_injection)
 
+@router.message(CommandStart(),CodeInMessage())
+async def handle_registration(message: Message, msg: list[str], request: Request):
+    user_id = msg[1]
+    # check code exists in DB
+    if not await request.check_user_id_exists(user_id):
+        await message.answer(text=i18n_ru.check_code)
+    # check code is not already registered
+    elif not await request.check_user_id_not_taken(user_id):
+        await message.answer(text=i18n_ru.user_id_taken)
+    # register in DB
+    else:
+        tg_id = message.from_user.id
+        await request.register_user(tg_id,user_id)
+        # send greeting message
+        user_name = await request.get_user_name(tg_id)
+        await message.answer(text=f'Привет, {user_name}!')
+        await message.answer(text=i18n_ru.greeting)
+
 @router.message(CommandStart())
 async def handle_start_command(message: Message):
     await message.answer(text=i18n_ru.start)
@@ -49,19 +65,20 @@ async def handle_start_command(message: Message):
 async def handle_help_command(message: Message):
     await message.answer(text=i18n_ru.help)
 
-@router.message(Command(commands='911'))
-async def handle_911_command(message: Message):
-    await message.answer('Травма в пути')
+# @router.message((Command(commands='911')|Command(commands='tt')),CodeInMessage())
+# async def handle_911_command(message: Message, msg: list[str], request: Request):
+#     address = msg[1]
+#     await message.answer(f'Травма в пути: {address}')
 
-@router.message(Command(commands='pay'))
-async def handle_pay_command(message: Message):
+@router.message(Command(commands='pay'),CodeInMessage())
+async def handle_pay_command(message: Message, msg: list[str], request: Request):
+    tg_id = message.from_user.id
+    # check tg_id assigned in DB
+    if not await request.check_tg_id_assigned(tg_id):
+        await message.answer(text=i18n_ru.tg_not_assigned)
+
     await message.answer('Плати')
 
 @router.message()
 async def handle_message(message: Message):
-    try:
-        #await message.answer(chat_id=message.chat.id)
-        print(message)
-        await message.answer(text=i18n_ru.default)
-    except TypeError:
-        await message.answer(text=i18n_ru.default)
+    await message.answer(text=i18n_ru.default)
