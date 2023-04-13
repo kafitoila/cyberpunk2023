@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS organizations(
 	END IF;
 END $$; */
 
-CREATE TABLE IF NOT EXISTS transations(
+CREATE TABLE IF NOT EXISTS transactions(
     transaction_id      SERIAL PRIMARY KEY,
     sender_id           INTEGER,
     sender_account_id   INTEGER,

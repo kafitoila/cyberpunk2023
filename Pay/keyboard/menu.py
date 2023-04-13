@@ -12,13 +12,14 @@ async def set_menu(bot: Bot):
         BotCommand(command='/pay',
                    description=i18n_ru.menu_pay),
         BotCommand(command='/balance',
-                   description=i18n_ru.menu_balance),
-        BotCommand(command='/pay_from',
-                   description=i18n_ru.menu_pay_from),
-        BotCommand(command='/set_access',
-                   description=i18n_ru.menu_set_access),
-        BotCommand(command='/get_access',
-                   description=i18n_ru.menu_get_access)]
+                   description=i18n_ru.menu_balance)#,
+        # BotCommand(command='/pay_from',
+        #            description=i18n_ru.menu_pay_from),
+        # BotCommand(command='/set_access',
+        #            description=i18n_ru.menu_set_access),
+        # BotCommand(command='/get_access',
+        #            description=i18n_ru.menu_get_access)
+        ]
     await bot.set_my_commands(main_menu_commands)
 
 # async def set_main_menu(bot: Bot):

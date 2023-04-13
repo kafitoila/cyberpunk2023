@@ -52,9 +52,9 @@ async def main():
 
     dp.update.middleware.register(DbSession(pool_connect))
     dp.message.middleware(DbSession(pool_connect))
-    # await Request.init(pool_connect)
-    request = Request(pool_connect)
-    await request.init()
+    await Request.init(pool_connect)
+    # request = Request(pool_connect)
+    # await request.init()
 
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
@@ -75,7 +75,7 @@ async def main():
     try:
         await bot.delete_webhook(drop_pending_updates=True)
         # await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types(), senderlist=sender_list)
-        await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types(), request=request)
+        await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     except Exception as ex:
         logging.error(f"[!!! Exception] - {ex}", exc_info=True)
     # finally:
