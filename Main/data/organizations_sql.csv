@@ -1,0 +1,15 @@
+﻿INSERT INTO organizations (account_id,user_id,balance,is_blocked,user1,user2,user3,group_id,org_name,special_balance) VALUES
+(default,927451,0,FALSE,0,0,0,1,'Полиция',0),
+(default,152491,0,FALSE,0,0,0,2,'Милитех',0),
+(default,515289,0,FALSE,0,0,0,3,'Арасака',0),
+(default,653029,0,FALSE,0,0,0,4,'Администрация',0),
+(default,603737,0,FALSE,0,0,0,5,'Парни',0),
+(default,429135,0,FALSE,0,0,0,6,'Бойня',0),
+(default,769335,0,FALSE,0,0,0,7,'Когти',0),
+(default,0,0,FALSE,0,0,0,8,'Нейтральные',0),
+(default,915465,0,FALSE,0,0,0,9,'Медцентр',0),
+(default,0,0,FALSE,0,0,0,10,'Травма Тим',0),
+(default,997603,0,FALSE,0,0,0,11,'Кумо',0),
+(default,192753,0,FALSE,0,0,0,12,'Посмертие',0),
+(default,1,2000000,FALSE,0,0,0,13,'Орги',0),
+(default,684221,800,FALSE,0,0,0,14,'Психотерапевт',0);

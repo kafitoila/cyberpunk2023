@@ -30,6 +30,10 @@ class Request:
         query = f"UPDATE users SET tg_id = {tg_id} WHERE user_id = {user_id};"
         await self.connector.execute(query)
 
+    async def get_secret_id(self, tg_id):
+        query = f"SELECT secret_id FROM users WHERE tg_id = {tg_id} AND is_dead = False;"
+        return await self.connector.fetchval(query)
+
     async def get_user_name(self, tg_id):
         query = f"SELECT user_name FROM users WHERE tg_id = {tg_id} AND is_dead = False;"
         return await self.connector.fetchval(query)
@@ -72,4 +76,8 @@ class Request:
 
     async def get_insurance(self, tg_id):
         query = f"SELECT insurance FROM users WHERE tg_id = {tg_id} AND is_dead = False;"
+        return await self.connector.fetchval(query)
+
+    async def get_users_in_group(self, group_id):
+        query = f"SELECT tg_id FROM users WHERE group_id = {group_id} AND is_dead = False;"
         return await self.connector.fetchval(query)
